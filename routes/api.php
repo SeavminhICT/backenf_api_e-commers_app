@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
@@ -39,4 +40,8 @@ Route::get('viewCart',[CartController::class,'viewCart'])->middleware('auth:sanc
 Route::post('remove-cart-item/{proId}',[CartController::class,'removeFromCart'])->middleware('auth:sanctum');
 Route::post('cart/clear',[CartController::class,'clearCart'])->middleware('auth:sanctum');
 
-
+// address routes
+Route::post('address',[AddressController::class,'store'])->middleware('auth:sanctum');
+Route::put('address/{id}',[AddressController::class,'update'])->middleware('auth:sanctum');
+Route::get('address',[AddressController::class,'index'])->middleware('auth:sanctum');
+Route::delete('address/{id}',[AddressController::class,'destroy'])->middleware('auth:sanctum');
