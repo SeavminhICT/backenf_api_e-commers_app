@@ -19,5 +19,6 @@ class Address extends Model
         'country',
         'latitude',
         'longitude',
+        'user_id'
     ];
 }
