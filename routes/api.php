@@ -4,6 +4,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,3 +46,10 @@ Route::post('address',[AddressController::class,'store'])->middleware('auth:sanc
 Route::put('address/{id}',[AddressController::class,'update'])->middleware('auth:sanctum');
 Route::get('address',[AddressController::class,'index'])->middleware('auth:sanctum');
 Route::delete('address/{id}',[AddressController::class,'destroy'])->middleware('auth:sanctum');
+
+//order routes
+
+Route::post('orders',[OrderController::class,'store'])->middleware('auth:sanctum');
+Route::get('orders',[OrderController::class,'index'])->middleware('auth:sanctum');
+Route::post('checkout',[OrderController::class,'checkout'])->middleware('auth:sanctum');
+
