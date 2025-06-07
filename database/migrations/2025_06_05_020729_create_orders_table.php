@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('cart_id')->constrained()->onDelete('cascade');
             $table->decimal('total_amount', 10, 2);
+            $table->string('shipping_address')->nullable(); // This can be a JSON field or a separate table
             $table->string('status')->default('pending'); // pending, completed, cancelled
             $table->timestamps();
         });
