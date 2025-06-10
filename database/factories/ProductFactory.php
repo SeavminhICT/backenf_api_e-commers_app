@@ -40,6 +40,7 @@ class ProductFactory extends Factory
             'description' => fake()->sentence(5),
             'price' => fake()->randomElement(['10' , '100']), // Random price between 10 and 1000
             'image' => $randomImages[rand(0, 10)],
+            'rating' => fake()->randomFloat(1, 1, 5), // Random rating between 1 and 5
             'is_featured' => fake()->randomElement([true, false]),
             'category_id' => fake()->randomNumber(), // Assuming categories are pre-populated with IDs from 1 to 10
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -15,10 +16,11 @@ public function store(Request $request)
         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Add image validation
     ]);
 
-    $imagePath = null;
-
-    if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('categories', 'public');
+ if($request->hasFile('image')){
+        $image = $request->file('image');
+        $imagePath = Storage::disk('public')->put('categories', $image);
+    } else {
+        $imagePath = null; // Handle case where no image is uploaded
     }
 
     $category = Category::create([
@@ -33,16 +35,24 @@ public function store(Request $request)
 }
 
 
-    public function index(){
-        $categories = Category::all();
-        return response()->json(
-            [
-                'Success' => true,
-                'message' => 'Categories retrieved successfully',
-                'categories' => $categories
-            ], 200
-        );
+public function index()
+{
+    $categories = Category::all();
+
+    // Convert image path to full URL
+    foreach ($categories as $category) {
+        if ($category->image) {
+            $category->image = asset('storage/' . $category->image);
+        }
     }
+
+    return response()->json([
+        'Success' => true,
+        'message' => 'Categories retrieved successfully',
+        'categories' => $categories
+    ], 200);
+}
+
 
     public function update(Request $request,$id){
         $cate = Category::find($id);

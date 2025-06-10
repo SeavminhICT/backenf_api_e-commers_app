@@ -17,8 +17,25 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->word(),
-            'image' => fake()->imageUrl(640, 480, 'cats', true), // Generates a random image URL
+            'name' => fake()->randomElement([
+                'Food',
+                'Electronics',
+                'Clothing',
+                'Books',
+                'Toys',
+                'Furniture',
+                'Beauty',
+                'Sports',
+                'Automotive',
+                'Health',
+            ]),
+
+            'image' => fake()->randomElement([
+                'images/food.png',     // Technology
+                'imageshealth.jpg',     // Health
+                'images/education.jpg', // Education
+                   // Business
+            ]),
             'description' => fake()->sentence(),
         ];
     }
