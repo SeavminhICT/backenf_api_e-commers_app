@@ -18,6 +18,7 @@ class CategoryFactory extends Factory
     {
         return [
             'name' => fake()->word(),
+            'image' => fake()->imageUrl(640, 480, 'cats', true), // Generates a random image URL
             'description' => fake()->sentence(),
         ];
     }

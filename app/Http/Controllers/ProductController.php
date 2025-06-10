@@ -18,7 +18,8 @@ class ProductController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric',
             'is_featured' => 'boolean',
-            'category_id' => 'required|exists:categories,id'
+            'category_id' => 'required|exists:categories,id',
+            'rating' => 'nullable|numeric|min:1|max:5',
         ]);
         if($request->hasFile('image')){
             $image = $request->file('image');
@@ -33,7 +34,8 @@ class ProductController extends Controller
             'price' => $request->price,
             'image' => $imagePath,
             'is_featured' => $request->is_featured,
-            'category_id' => $request->category_id
+            'category_id' => $request->category_id,
+            'rating' => $request->rating,
         ]);
         return response()->json(
             [
@@ -48,7 +50,7 @@ class ProductController extends Controller
     public function index(){
         $categories = Category::with([
             'products'=> function($query){
-                $query->select('id','name','description','price','image','is_featured','category_id');
+                $query->select('id','name','description','price','image','is_featured','category_id' , 'rating');
             }
             ])->latest()->get(['id','name']);
 
@@ -78,6 +80,7 @@ class ProductController extends Controller
                     'name'=> $product->name,
                     'description'=> $product->description,
                     'price'=> $product->price,
+                    'rating'=> $product->rating,
                     'image'=> asset($product->image) ? asset('storage/'.$product->image) : null
                 ];
             });
@@ -104,6 +107,7 @@ class ProductController extends Controller
                     'name'=> $product->name,
                     'description'=> $product->description,
                     'price'=> $product->price,
+                    'rating'=> $product->rating,
                     'image'=> asset($product->image) ? asset('storage/'.$product->image) : null
                 ];
             });

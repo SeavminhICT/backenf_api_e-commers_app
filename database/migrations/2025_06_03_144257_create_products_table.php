@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
             $table->string('image');
+            $table->integer('rating');
             $table->boolean('is_featured')->default(false)->nullable();
             // $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreignId('category_id');
