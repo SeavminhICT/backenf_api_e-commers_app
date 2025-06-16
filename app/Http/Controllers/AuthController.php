@@ -23,7 +23,7 @@ class AuthController extends Controller
             $image = $request->file('avatar');
            $path =  Storage::disk('public')->put('users',$image);
            $request->avatar = $path;
-           
+
         }
         User::create(
             [
@@ -37,6 +37,11 @@ class AuthController extends Controller
 
         return response()->json([
             'message'=> 'user created successful',
+            'user'=> [
+                'name'=> $request->name,
+                'email'=> $request->email,
+                'avatar'=> $request->avatar ? asset('storage/'.$request->avatar) : null
+            ]
         ],200);
 
     }
@@ -106,5 +111,75 @@ class AuthController extends Controller
             'user'=> $user
         ]);
 
+    }
+
+    // get user profile
+    public function profile(Request $request){
+        $user = $request->user();
+        $user->avatar = $user->avatar ? asset('storage/'.$user->avatar) : null;
+
+        return response()->json([
+            'message'=> 'user profile retrieved successfully',
+            'user'=> $user
+        ]);
+    }
+    public function delete(Request $request){
+        $user = $request->user();
+        if(Storage::disk('public')->exists($user->avatar)){
+            Storage::disk('public')->delete($user->avatar);
+        }
+        $user->tokens()->delete();
+        $user->delete();
+
+        return response()->json([
+            'message'=> 'user deleted successfully'
+        ]);
+    }
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return response()->json(['message' => 'Password reset successfully'], 200);
+    }
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $user = $request->user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json(['message' => 'Current password is incorrect'], 403);
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json(['message' => 'Password changed successfully'], 200);
+    }
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        // Here you would typically send a password reset link to the user's email.
+        // For simplicity, we'll just return a success message.
+
+        return response()->json(['message' => 'Password reset link sent to your email'], 200);
     }
 }

@@ -31,6 +31,7 @@ Route::delete('/category/{id}', [CategoryController::class, 'destroy']);
 // Product routes
 Route::post('product',[ProductController::class,'store']);
 Route::get('products',[ProductController::class,'index']);
+Route::put('/products/{id}', [ProductController::class, 'update']);
 Route::get('getproductbycat/{id}',[ProductController::class,'getProductByCategroy']);
 Route::get('searchproduct',[ProductController::class,'search']);
 
@@ -53,3 +54,7 @@ Route::post('orders',[OrderController::class,'store'])->middleware('auth:sanctum
 Route::get('orders',[OrderController::class,'index'])->middleware('auth:sanctum');
 Route::post('checkout',[OrderController::class,'checkout'])->middleware('auth:sanctum');
 
+// profile routes
+Route::get('profile',[AuthController::class,'profile'])->middleware('auth:sanctum');
+Route::post('profile/update',[AuthController::class,'update'])->middleware('auth:sanctum');
+Route::post('profile/delete',[AuthController::class,'delete'])->middleware('auth:sanctum');
