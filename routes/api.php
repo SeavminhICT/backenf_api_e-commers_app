@@ -58,3 +58,14 @@ Route::post('checkout',[OrderController::class,'checkout'])->middleware('auth:sa
 Route::get('profile',[AuthController::class,'profile'])->middleware('auth:sanctum');
 Route::post('profile/update',[AuthController::class,'update'])->middleware('auth:sanctum');
 Route::post('profile/delete',[AuthController::class,'delete'])->middleware('auth:sanctum');
+
+
+// ... other routes
+
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('user/update',[AuthController::class,'update'])->middleware('auth:sanctum');
+
+// Add this line for changing the password
+Route::post('/change-password', [AuthController::class, 'changePassword'])->middleware('auth:sanctum');
+
+
